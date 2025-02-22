@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مشاركة الملفات</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; padding: 20px; }
+        #fileInput { margin: 20px; }
+        #uploadBtn { padding: 10px; background: #28a745; color: white; border: none; cursor: pointer; }
+        #link { margin-top: 20px; display: none; }
+    </style>
+</head>
+<body>
+    <h2>مشاركة الملفات</h2>
+    <input type="file" id="fileInput">
+    <button id="uploadBtn">رفع الملف</button>
+    <p id="link"></p>
+    
+    <script>
+        document.getElementById('uploadBtn').addEventListener('click', async () => {
+            const file = document.getElementById('fileInput').files[0];
+            if (!file) return alert('يرجى اختيار ملف');
+            
+            const formData = new FormData();
+            formData.append('file', file);
+            
+            const response = await fetch('/upload', { method: 'POST', body: formData });
+            const data = await response.json();
+            
+            if (data.url) {
+                const link = document.getElementById('link');
+                link.innerHTML = <a href="${data.url}" target="_blank">تحميل الملف</a>;
+                link.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>
